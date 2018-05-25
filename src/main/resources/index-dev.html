@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>jmh-view dev</title>
+</head>
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css"
+      type="text/css"/>
+
+<link rel="stylesheet"
+      href="jmv-view.css"
+      type="text/css"/>
+
+<style>
+    #container{
+        height: 100vh;
+    }
+</style>
+
+<body>
+
+<div id="container" s></div>
+<script type="text/javascript" src="/workbench.js"></script>
+
+<!--<script type="text/javascript"  src="https://code.jquery.com/jquery-2.2.4.min.js" ></script>-->
+<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/5.0.14/highcharts.js"></script>-->
+
+<script type="text/javascript" src="../jmh-view-jsdeps.js"></script>
+<script type="text/javascript" src="../jmh-view-fastopt.js"></script>
+
+<script>
+    JMHView.setup("container", "sample1.json")
+
+</script>
+
+</body>
+</html>

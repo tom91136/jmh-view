@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>jmh-view dev</title>
+</head>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css"
+      type="text/css"/>
+<style>
+
+    body {
+        font-family: sans-serif;
+    }
+
+    .jmh-view {
+        display: flex;
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.73);
+        height: 300px;
+    }
+
+    .jmh-view aside {
+        order: -1;
+        min-width: 180px;
+        max-width: 200px;
+        background-color: #294066;
+        padding: 12px 0 12px;
+        overflow-y: auto;
+    }
+
+    .jmh-view .class-nav > ol {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .jmh-view .class-nav li > a {
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.7);
+        display: block;
+        padding: 0 24px 0 25px;
+        line-height: 38px;
+    }
+
+    .jmh-view .class-nav li > a.active {
+        border-left: 3px solid #3e5b95;
+        background-color: #3c477f;
+
+        color: #fff;
+    }
+
+    .jmh-view .class-nav li > a:hover {
+        background: #2d5799;
+    }
+
+    .jmh-view article {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        background-color: rgba(156, 184, 221, 0.25);
+    }
+
+    .jmh-view article > header {
+        display: flex;
+        flex-direction: row;
+        background-color: white;
+        padding: 14px;
+        border-bottom: 2px solid #333333;
+    }
+
+    .jmh-view article header span {
+        padding: 0 8px 0 8px;
+    }
+
+    .jmh-view .class-result {
+        flex: 1;
+        overflow-y: auto;
+        display: block;
+        padding: 12px;
+    }
+
+    .jmh-view .class-result .result-block {
+        display: block;
+        background-color: white;
+        padding: 8px;
+    }
+
+    @media (min-width: 0px) and  (max-width: 800px) {
+        .jmh-view aside {
+            display: none;
+        }
+    }
+
+    @media (min-width: 800px) {
+        .jmh-view .alt-class-nav {
+            display: none;
+        }
+    }
+
+</style>
+
+<body>
+
+
+<div id="container" class="jmh-view">
+
+    <aside>
+        <nav class="class-nav">
+            <ol>
+
+                <!--rep-->
+
+                <li><a href="#" class="active">C</a></li>
+                <li><a href="#">C</a></li>
+                <li><a href="#">C</a></li>
+                <li><a href="#">X</a></li>
+                <li><a href="#">X</a></li>
+                <li><a href="#">X</a></li>
+                <li><a href="#">X</a></li>
+                <li><a href="#">X</a></li>
+            </ol>
+        </nav>
+    </aside>
+
+    <article>
+        <header>
+            <span class="alt-class-nav">
+                Classes:
+                <select>
+                    <option>A</option>
+                    <option>B</option>
+                </select>
+            </span>
+            <span>
+                Parameters:
+                <select>
+                    <option>Separate</option>
+                    <option>Combined</option>
+                </select>
+            </span>
+            <span>
+                Sort:
+                <select>
+                    <option>Natural</option>
+                    <option>Asc</option>
+                    <option>Desc</option>
+                </select>
+            </span>
+        </header>
+        <section class="class-result">
+
+            <div class="result-block">
+                A
+            </div>
+
+            <div class="result-block">
+                aa
+            </div>
+
+        </section>
+    </article>
+</div>
+
+
+</body>
+</html>

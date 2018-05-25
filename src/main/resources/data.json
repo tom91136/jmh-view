@@ -1,0 +1,1786 @@
+[
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.baselineRecursiveDecent",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld.bf"
+        },
+        "primaryMetric" : {
+            "score" : 1247.5332145589225,
+            "scoreError" : 114.56945261798141,
+            "scoreConfidence" : [
+                1132.9637619409411,
+                1362.1026671769039
+            ],
+            "scorePercentiles" : {
+                "0.0" : 1243.1070898124108,
+                "50.0" : 1244.771873471567,
+                "90.0" : 1254.720680392789,
+                "95.0" : 1254.720680392789,
+                "99.0" : 1254.720680392789,
+                "99.9" : 1254.720680392789,
+                "99.99" : 1254.720680392789,
+                "99.999" : 1254.720680392789,
+                "99.9999" : 1254.720680392789,
+                "100.0" : 1254.720680392789
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    1243.1070898124108,
+                    1244.771873471567,
+                    1254.720680392789
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.baselineRecursiveDecent",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld_comments.bf"
+        },
+        "primaryMetric" : {
+            "score" : 14041.313372491779,
+            "scoreError" : 5231.385175544586,
+            "scoreConfidence" : [
+                8809.928196947192,
+                19272.698548036366
+            ],
+            "scorePercentiles" : {
+                "0.0" : 13831.333914101608,
+                "50.0" : 13924.589411256979,
+                "90.0" : 14368.016792116754,
+                "95.0" : 14368.016792116754,
+                "99.0" : 14368.016792116754,
+                "99.9" : 14368.016792116754,
+                "99.99" : 14368.016792116754,
+                "99.999" : 14368.016792116754,
+                "99.9999" : 14368.016792116754,
+                "100.0" : 14368.016792116754
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    13831.333914101608,
+                    13924.589411256979,
+                    14368.016792116754
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.coldAtto",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld.bf"
+        },
+        "primaryMetric" : {
+            "score" : 104940.68400022108,
+            "scoreError" : 3933.50418603593,
+            "scoreConfidence" : [
+                101007.17981418515,
+                108874.18818625702
+            ],
+            "scorePercentiles" : {
+                "0.0" : 104745.09363217428,
+                "50.0" : 104905.07981959304,
+                "90.0" : 105171.8785488959,
+                "95.0" : 105171.8785488959,
+                "99.0" : 105171.8785488959,
+                "99.9" : 105171.8785488959,
+                "99.99" : 105171.8785488959,
+                "99.999" : 105171.8785488959,
+                "99.9999" : 105171.8785488959,
+                "100.0" : 105171.8785488959
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    105171.8785488959,
+                    104905.07981959304,
+                    104745.09363217428
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.coldAtto",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld_comments.bf"
+        },
+        "primaryMetric" : {
+            "score" : 561068.2177402342,
+            "scoreError" : 220062.10535357322,
+            "scoreConfidence" : [
+                341006.112386661,
+                781130.3230938074
+            ],
+            "scorePercentiles" : {
+                "0.0" : 547185.4715536105,
+                "50.0" : 567033.7715419501,
+                "90.0" : 568985.4101251422,
+                "95.0" : 568985.4101251422,
+                "99.0" : 568985.4101251422,
+                "99.9" : 568985.4101251422,
+                "99.99" : 568985.4101251422,
+                "99.999" : 568985.4101251422,
+                "99.9999" : 568985.4101251422,
+                "100.0" : 568985.4101251422
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    547185.4715536105,
+                    568985.4101251422,
+                    567033.7715419501
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.coldFastParse",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld.bf"
+        },
+        "primaryMetric" : {
+            "score" : 11758.875127461986,
+            "scoreError" : 2800.2619425938665,
+            "scoreConfidence" : [
+                8958.61318486812,
+                14559.137070055853
+            ],
+            "scorePercentiles" : {
+                "0.0" : 11650.186261604948,
+                "50.0" : 11691.976901316251,
+                "90.0" : 11934.46221946476,
+                "95.0" : 11934.46221946476,
+                "99.0" : 11934.46221946476,
+                "99.9" : 11934.46221946476,
+                "99.99" : 11934.46221946476,
+                "99.999" : 11934.46221946476,
+                "99.9999" : 11934.46221946476,
+                "100.0" : 11934.46221946476
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    11650.186261604948,
+                    11691.976901316251,
+                    11934.46221946476
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.coldFastParse",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld_comments.bf"
+        },
+        "primaryMetric" : {
+            "score" : 25943.465222057315,
+            "scoreError" : 1981.3301394254447,
+            "scoreConfidence" : [
+                23962.13508263187,
+                27924.79536148276
+            ],
+            "scorePercentiles" : {
+                "0.0" : 25857.732735217312,
+                "50.0" : 25907.071437822156,
+                "90.0" : 26065.591493132477,
+                "95.0" : 26065.591493132477,
+                "99.0" : 26065.591493132477,
+                "99.9" : 26065.591493132477,
+                "99.99" : 26065.591493132477,
+                "99.999" : 26065.591493132477,
+                "99.9999" : 26065.591493132477,
+                "100.0" : 26065.591493132477
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    25857.732735217312,
+                    26065.591493132477,
+                    25907.071437822156
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.coldParboiled2",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld.bf"
+        },
+        "primaryMetric" : {
+            "score" : 4239.476533199784,
+            "scoreError" : 354.5748466051532,
+            "scoreConfidence" : [
+                3884.901686594631,
+                4594.051379804938
+            ],
+            "scorePercentiles" : {
+                "0.0" : 4220.37347043832,
+                "50.0" : 4238.828004746567,
+                "90.0" : 4259.228124414465,
+                "95.0" : 4259.228124414465,
+                "99.0" : 4259.228124414465,
+                "99.9" : 4259.228124414465,
+                "99.99" : 4259.228124414465,
+                "99.999" : 4259.228124414465,
+                "99.9999" : 4259.228124414465,
+                "100.0" : 4259.228124414465
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    4220.37347043832,
+                    4238.828004746567,
+                    4259.228124414465
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.coldParboiled2",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld_comments.bf"
+        },
+        "primaryMetric" : {
+            "score" : 19730.66954049403,
+            "scoreError" : 4918.579906154729,
+            "scoreConfidence" : [
+                14812.0896343393,
+                24649.24944664876
+            ],
+            "scorePercentiles" : {
+                "0.0" : 19529.1587940091,
+                "50.0" : 19625.92221197433,
+                "90.0" : 20036.92761549866,
+                "95.0" : 20036.92761549866,
+                "99.0" : 20036.92761549866,
+                "99.9" : 20036.92761549866,
+                "99.99" : 20036.92761549866,
+                "99.999" : 20036.92761549866,
+                "99.9999" : 20036.92761549866,
+                "100.0" : 20036.92761549866
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    19529.1587940091,
+                    19625.92221197433,
+                    20036.92761549866
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.coldParsley",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld.bf"
+        },
+        "primaryMetric" : {
+            "score" : 28031.345611509798,
+            "scoreError" : 6387.910163397187,
+            "scoreConfidence" : [
+                21643.43544811261,
+                34419.25577490698
+            ],
+            "scorePercentiles" : {
+                "0.0" : 27644.65422033055,
+                "50.0" : 28122.45440485898,
+                "90.0" : 28326.928209339865,
+                "95.0" : 28326.928209339865,
+                "99.0" : 28326.928209339865,
+                "99.9" : 28326.928209339865,
+                "99.99" : 28326.928209339865,
+                "99.999" : 28326.928209339865,
+                "99.9999" : 28326.928209339865,
+                "100.0" : 28326.928209339865
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    27644.65422033055,
+                    28122.45440485898,
+                    28326.928209339865
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.coldParsley",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld_comments.bf"
+        },
+        "primaryMetric" : {
+            "score" : 36401.87907720201,
+            "scoreError" : 5215.638094972902,
+            "scoreConfidence" : [
+                31186.240982229105,
+                41617.51717217491
+            ],
+            "scorePercentiles" : {
+                "0.0" : 36072.49661016949,
+                "50.0" : 36547.554227874,
+                "90.0" : 36585.586393562546,
+                "95.0" : 36585.586393562546,
+                "99.0" : 36585.586393562546,
+                "99.9" : 36585.586393562546,
+                "99.99" : 36585.586393562546,
+                "99.999" : 36585.586393562546,
+                "99.9999" : 36585.586393562546,
+                "100.0" : 36585.586393562546
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    36072.49661016949,
+                    36547.554227874,
+                    36585.586393562546
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.coldScalaParserCombinator",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld.bf"
+        },
+        "primaryMetric" : {
+            "score" : 11222.599662102917,
+            "scoreError" : 10117.798025395517,
+            "scoreConfidence" : [
+                1104.8016367073997,
+                21340.397687498436
+            ],
+            "scorePercentiles" : {
+                "0.0" : 10695.187326910533,
+                "50.0" : 11171.74588085477,
+                "90.0" : 11800.865778543446,
+                "95.0" : 11800.865778543446,
+                "99.0" : 11800.865778543446,
+                "99.9" : 11800.865778543446,
+                "99.99" : 11800.865778543446,
+                "99.999" : 11800.865778543446,
+                "99.9999" : 11800.865778543446,
+                "100.0" : 11800.865778543446
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    11800.865778543446,
+                    10695.187326910533,
+                    11171.74588085477
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.coldScalaParserCombinator",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld_comments.bf"
+        },
+        "primaryMetric" : {
+            "score" : 50139.56393438302,
+            "scoreError" : 1953.8245633277768,
+            "scoreConfidence" : [
+                48185.73937105524,
+                52093.388497710795
+            ],
+            "scorePercentiles" : {
+                "0.0" : 50034.46781051473,
+                "50.0" : 50135.670910184446,
+                "90.0" : 50248.553082449886,
+                "95.0" : 50248.553082449886,
+                "99.0" : 50248.553082449886,
+                "99.9" : 50248.553082449886,
+                "99.99" : 50248.553082449886,
+                "99.999" : 50248.553082449886,
+                "99.9999" : 50248.553082449886,
+                "100.0" : 50248.553082449886
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    50248.553082449886,
+                    50034.46781051473,
+                    50135.670910184446
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.warmAtto",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld.bf"
+        },
+        "primaryMetric" : {
+            "score" : 102807.2620440888,
+            "scoreError" : 7556.391842464495,
+            "scoreConfidence" : [
+                95250.8702016243,
+                110363.6538865533
+            ],
+            "scorePercentiles" : {
+                "0.0" : 102422.15472045874,
+                "50.0" : 102754.20682215145,
+                "90.0" : 103245.42458965624,
+                "95.0" : 103245.42458965624,
+                "99.0" : 103245.42458965624,
+                "99.9" : 103245.42458965624,
+                "99.99" : 103245.42458965624,
+                "99.999" : 103245.42458965624,
+                "99.9999" : 103245.42458965624,
+                "100.0" : 103245.42458965624
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    103245.42458965624,
+                    102422.15472045874,
+                    102754.20682215145
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.warmAtto",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld_comments.bf"
+        },
+        "primaryMetric" : {
+            "score" : 557437.6403464255,
+            "scoreError" : 106486.90885972629,
+            "scoreConfidence" : [
+                450950.7314866992,
+                663924.5492061517
+            ],
+            "scorePercentiles" : {
+                "0.0" : 552862.2331491712,
+                "50.0" : 555439.4697390338,
+                "90.0" : 564011.218151071,
+                "95.0" : 564011.218151071,
+                "99.0" : 564011.218151071,
+                "99.9" : 564011.218151071,
+                "99.99" : 564011.218151071,
+                "99.999" : 564011.218151071,
+                "99.9999" : 564011.218151071,
+                "100.0" : 564011.218151071
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    555439.4697390338,
+                    552862.2331491712,
+                    564011.218151071
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.warmFastParse",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld.bf"
+        },
+        "primaryMetric" : {
+            "score" : 10264.233604228602,
+            "scoreError" : 2528.18734633227,
+            "scoreConfidence" : [
+                7736.0462578963325,
+                12792.420950560872
+            ],
+            "scorePercentiles" : {
+                "0.0" : 10134.654436946521,
+                "50.0" : 10247.71559586023,
+                "90.0" : 10410.330779879057,
+                "95.0" : 10410.330779879057,
+                "99.0" : 10410.330779879057,
+                "99.9" : 10410.330779879057,
+                "99.99" : 10410.330779879057,
+                "99.999" : 10410.330779879057,
+                "99.9999" : 10410.330779879057,
+                "100.0" : 10410.330779879057
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    10247.71559586023,
+                    10410.330779879057,
+                    10134.654436946521
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.warmFastParse",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld_comments.bf"
+        },
+        "primaryMetric" : {
+            "score" : 24873.50905587807,
+            "scoreError" : 11536.413046149088,
+            "scoreConfidence" : [
+                13337.09600972898,
+                36409.92210202716
+            ],
+            "scorePercentiles" : {
+                "0.0" : 24237.813216371436,
+                "50.0" : 24880.255260932292,
+                "90.0" : 25502.458690330477,
+                "95.0" : 25502.458690330477,
+                "99.0" : 25502.458690330477,
+                "99.9" : 25502.458690330477,
+                "99.99" : 25502.458690330477,
+                "99.999" : 25502.458690330477,
+                "99.9999" : 25502.458690330477,
+                "100.0" : 25502.458690330477
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    24237.813216371436,
+                    25502.458690330477,
+                    24880.255260932292
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.warmParboiled2",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld.bf"
+        },
+        "primaryMetric" : {
+            "score" : 4256.656965297897,
+            "scoreError" : 805.7971248436589,
+            "scoreConfidence" : [
+                3450.859840454238,
+                5062.454090141556
+            ],
+            "scorePercentiles" : {
+                "0.0" : 4225.798004892703,
+                "50.0" : 4236.920464318245,
+                "90.0" : 4307.252426682744,
+                "95.0" : 4307.252426682744,
+                "99.0" : 4307.252426682744,
+                "99.9" : 4307.252426682744,
+                "99.99" : 4307.252426682744,
+                "99.999" : 4307.252426682744,
+                "99.9999" : 4307.252426682744,
+                "100.0" : 4307.252426682744
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    4225.798004892703,
+                    4236.920464318245,
+                    4307.252426682744
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.warmParboiled2",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld_comments.bf"
+        },
+        "primaryMetric" : {
+            "score" : 21505.994331880447,
+            "scoreError" : 46062.15581857157,
+            "scoreConfidence" : [
+                -24556.161486691122,
+                67568.15015045201
+            ],
+            "scorePercentiles" : {
+                "0.0" : 20045.04896478464,
+                "50.0" : 20051.528556822966,
+                "90.0" : 24421.40547403374,
+                "95.0" : 24421.40547403374,
+                "99.0" : 24421.40547403374,
+                "99.9" : 24421.40547403374,
+                "99.99" : 24421.40547403374,
+                "99.999" : 24421.40547403374,
+                "99.9999" : 24421.40547403374,
+                "100.0" : 24421.40547403374
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    20051.528556822966,
+                    20045.04896478464,
+                    24421.40547403374
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.warmParsley",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld.bf"
+        },
+        "primaryMetric" : {
+            "score" : 3888.3313495518073,
+            "scoreError" : 206.1928709185897,
+            "scoreConfidence" : [
+                3682.138478633218,
+                4094.524220470397
+            ],
+            "scorePercentiles" : {
+                "0.0" : 3875.406215488346,
+                "50.0" : 3893.230664429713,
+                "90.0" : 3896.3571687373624,
+                "95.0" : 3896.3571687373624,
+                "99.0" : 3896.3571687373624,
+                "99.9" : 3896.3571687373624,
+                "99.99" : 3896.3571687373624,
+                "99.999" : 3896.3571687373624,
+                "99.9999" : 3896.3571687373624,
+                "100.0" : 3896.3571687373624
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    3893.230664429713,
+                    3875.406215488346,
+                    3896.3571687373624
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.warmParsley",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld_comments.bf"
+        },
+        "primaryMetric" : {
+            "score" : 11393.174223318905,
+            "scoreError" : 3948.2798426411027,
+            "scoreConfidence" : [
+                7444.8943806778025,
+                15341.454065960008
+            ],
+            "scorePercentiles" : {
+                "0.0" : 11243.076403408197,
+                "50.0" : 11295.191436024255,
+                "90.0" : 11641.254830524258,
+                "95.0" : 11641.254830524258,
+                "99.0" : 11641.254830524258,
+                "99.9" : 11641.254830524258,
+                "99.99" : 11641.254830524258,
+                "99.999" : 11641.254830524258,
+                "99.9999" : 11641.254830524258,
+                "100.0" : 11641.254830524258
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    11295.191436024255,
+                    11243.076403408197,
+                    11641.254830524258
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.warmScalaParserCombinator",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld.bf"
+        },
+        "primaryMetric" : {
+            "score" : 9682.365725144866,
+            "scoreError" : 1326.1988108831695,
+            "scoreConfidence" : [
+                8356.166914261696,
+                11008.564536028036
+            ],
+            "scorePercentiles" : {
+                "0.0" : 9626.608180041776,
+                "50.0" : 9655.906139588764,
+                "90.0" : 9764.582855804056,
+                "95.0" : 9764.582855804056,
+                "99.0" : 9764.582855804056,
+                "99.9" : 9764.582855804056,
+                "99.99" : 9764.582855804056,
+                "99.999" : 9764.582855804056,
+                "99.9999" : 9764.582855804056,
+                "100.0" : 9764.582855804056
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    9626.608180041776,
+                    9655.906139588764,
+                    9764.582855804056
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    },
+    {
+        "jmhVersion" : "1.20",
+        "benchmark" : "net.kurobako.spb.brainfuck.BrainFuck.warmScalaParserCombinator",
+        "mode" : "avgt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/usr/java/jdk1.8.0_161/jre/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+            "-Dfile.encoding=UTF-8"
+        ],
+        "jdkVersion" : "1.8.0_161",
+        "vmVersion" : "25.161-b12",
+        "warmupIterations" : 3,
+        "warmupTime" : "1 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 3,
+        "measurementTime" : "1 s",
+        "measurementBatchSize" : 1,
+        "params" : {
+            "file" : "brainfuck/helloworld_comments.bf"
+        },
+        "primaryMetric" : {
+            "score" : 49899.40315268657,
+            "scoreError" : 3323.6059561585007,
+            "scoreConfidence" : [
+                46575.797196528074,
+                53223.00910884507
+            ],
+            "scorePercentiles" : {
+                "0.0" : 49703.57379982109,
+                "50.0" : 49930.782176734894,
+                "90.0" : 50063.85348150373,
+                "95.0" : 50063.85348150373,
+                "99.0" : 50063.85348150373,
+                "99.9" : 50063.85348150373,
+                "99.99" : 50063.85348150373,
+                "99.999" : 50063.85348150373,
+                "99.9999" : 50063.85348150373,
+                "100.0" : 50063.85348150373
+            },
+            "scoreUnit" : "ns/op",
+            "rawData" : [
+                [
+                    49703.57379982109,
+                    49930.782176734894,
+                    50063.85348150373
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+            "·stack" : {
+                "score" : "NaN",
+                "scoreError" : "NaN",
+                "scoreConfidence" : [
+                    "NaN",
+                    "NaN"
+                ],
+                "scorePercentiles" : {
+                    "0.0" : "NaN",
+                    "50.0" : "NaN",
+                    "90.0" : "NaN",
+                    "95.0" : "NaN",
+                    "99.0" : "NaN",
+                    "99.9" : "NaN",
+                    "99.99" : "NaN",
+                    "99.999" : "NaN",
+                    "99.9999" : "NaN",
+                    "100.0" : "NaN"
+                },
+                "scoreUnit" : "---",
+                "rawData" : [
+                    [
+                        "NaN",
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        }
+    }
+]
+
+
