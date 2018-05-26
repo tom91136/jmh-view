@@ -14,6 +14,11 @@ object JMHReport {
 
 	import enumeratum.values._
 
+	def fqnLastFragment(s: String): String = s.substring(s.lastIndexOf('.') + 1)
+
+	def fqnPathFragment(s: String): String = s.substring(0, s.lastIndexOf('.'))
+
+
 	sealed abstract class Mode(val value: String) extends StringEnumEntry
 	case object Mode extends StringEnum[Mode] {
 		override def values: immutable.IndexedSeq[Mode] = findValues
