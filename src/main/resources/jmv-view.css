@@ -6,10 +6,11 @@
 .jmh-view aside {
     order: -1;
     min-width: 180px;
-    max-width: 200px;
+    max-width: 250px;
     background-color: #294066;
     padding: 12px 0 12px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .jmh-view .class-nav > ol {
@@ -18,18 +19,26 @@
     list-style: none;
 }
 
-.jmh-view .class-nav li > a {
-    text-decoration: none;
+.jmh-view .class-nav li {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.jmh-view .class-nav li a {
     color: rgba(255, 255, 255, 0.7);
+    padding: 0 10px 0 22px;
+    text-decoration: none;
     display: block;
-    padding: 0 24px 0 25px;
-    line-height: 38px;
+    line-height: 25px;
+    margin: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .jmh-view .class-nav li > a.active {
-    border-left: 3px solid #3e5b95;
-    background-color: #3c477f;
-
+    background-color: #405f9b;
     color: #fff;
 }
 
@@ -48,6 +57,7 @@
 .jmh-view article > header {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     background-color: white;
     padding: 14px;
     border-bottom: 1px solid rgba(51, 51, 51, 0.65);
@@ -65,24 +75,34 @@
     padding: 12px;
 }
 
+.jmh-view table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #d8d8d8;
+}
+
+.jmh-view table td, .jmh-view table th {
+    border: 1px solid #d8d8d8;
+}
+
 .jmh-view .class-result .result-block {
     display: block;
     background-color: white;
     padding: 8px;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .jmh-view .class-result .highcharts-container {
     overflow: hidden;
 }
 
-@media (min-width: 0px) and  (max-width: 800px) {
+@media only screen and (min-width: 0px) and  (max-width: 799px) {
     .jmh-view aside {
         display: none;
     }
 }
 
-@media (min-width: 800px) {
+@media only screen and (min-width: 800px) {
     .jmh-view .alt-class-nav {
         display: none;
     }

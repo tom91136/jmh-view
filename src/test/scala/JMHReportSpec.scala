@@ -1,4 +1,4 @@
-import net.kurobako.jmhv.JMHReport.Run
+import net.kurobako.jmhv.JMHReport
 import org.scalatest.prop.TableDrivenPropertyChecks.{forAll, _}
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -20,10 +20,8 @@ class JMHReportSpec extends FlatSpec with Matchers {
 			"string-concatenation_jdk7.json",
 			"string-concatenation_jdk8.json",
 		)) { file =>
-
 			// TODO need to verify whether data structure are actually equal
-			upickle.default.read[Seq[Run]](Source.fromResource(file).mkString)
-
+			JMHReport(Source.fromResource(file).mkString).isRight shouldBe true
 		}
 
 

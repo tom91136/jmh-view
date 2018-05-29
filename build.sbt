@@ -37,7 +37,7 @@ lazy val commonSettings = Seq(
 		"-Xlint:unsound-match",
 
 		"-Yno-adapted-args",
-		"-Ywarn-dead-code",
+		// "-Ywarn-dead-code", // does not work well with macros
 		"-Ywarn-extra-implicit",
 		"-Ywarn-inaccessible",
 		"-Ywarn-infer-any",
@@ -67,17 +67,22 @@ lazy val `jmh-view` = project.in(file("."))
 		skip in packageJSDependencies := false,
 		workbenchDefaultRootObject := Some(("classes/index-dev.html", "target/scala-2.12")),
 		libraryDependencies ++= Seq(
-			"org.scala-js" %%% "scalajs-dom" % "0.9.5",
+			"com.chuusai" %%% "shapeless" % "2.3.3",
+			"org.typelevel" %%% "cats-core" % "1.1.0",
 			"com.lihaoyi" %%% "upickle" % "0.6.6",
 			"com.lihaoyi" %%% "pprint" % "0.5.3",
 			"com.beachape" %%% "enumeratum" % "1.5.13",
-			"com.github.karasiq" %%% "scalajs-highcharts" % "1.2.1",
+
 			"com.thoughtworks.binding" %%% "dom" % "11.0.1",
+
+			// facade
+			"org.scala-js" %%% "scalajs-dom" % "0.9.5",
+			"com.github.karasiq" %%% "scalajs-highcharts" % "1.2.1",
 
 			"org.scalatest" %% "scalatest" % "3.0.1" % Test,
 		),
 		jsDependencies ++= Seq(
-//			"org.webjars" % "jquery" % "2.2.1" / "jquery.min.js", // minified "jquery.min.js",
+			//			"org.webjars" % "jquery" % "2.2.1" / "jquery.min.js", // minified "jquery.min.js",
 			"org.webjars" % "highcharts" % "5.0.14" / "5.0.14/highcharts.js" //dependsOn "jquery.min.js"
 		)
 	)
