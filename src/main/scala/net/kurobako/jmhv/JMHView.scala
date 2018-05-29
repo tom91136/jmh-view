@@ -4,15 +4,15 @@ package net.kurobako.jmhv
 import com.thoughtworks.binding.Binding.{BindingSeq, Constants, Var}
 import com.thoughtworks.binding.{Binding, dom}
 import enumeratum.values.{StringEnum, StringEnumEntry}
-import net.kurobako.jmhv.DomBindings.renderDropDown
-import net.kurobako.jmhv.JMHReport.{ClassGroup, ClassMethod, Cls, Mtd, PackageGroup, Param, Run}
+import net.kurobako.jmhv.DomBindings.dropDown
+import net.kurobako.jmhv.JMHReport.{ClassGroup, ClassMethod, Cls, Metric, PackageGroup}
 import net.kurobako.jmhv.JMHView.GroupMode.{Method, Parameter}
 import net.kurobako.jmhv.JMHView.ScaleMode.{Linear, Logarithmic}
 import net.kurobako.jmhv.JMHView.SortMode.{Ascending, Descending, Natural}
 import org.scalajs.dom._
 import org.scalajs.dom.experimental.{Fetch, Response}
-import org.scalajs.dom.html.{Div, Table}
-import shapeless.{Nat, Sized}
+import org.scalajs.dom.html.Div
+import shapeless.Sized
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -89,6 +89,202 @@ object JMHView {
 							showDetails: Var[Boolean] = Var(true),
 						   )
 
+	@dom def renderReport(state: JMHViewState, report: JMHReport) = {
+
+		val classGroups = report.packages.flatMap {_.classes}
+
+
+		@dom def mkChart[A](cls: Cls, group: String,
+							xs: Map[A, (ClassMethod, Metric)], range: (Double, Double))
+						   (f: A => String): Binding[Div] = {
+
+			// XXX f should be an instance of Show but that's too much work
+
+			val _id = s"$cls-${group.hashCode.toHexString}"
+
+			@dom val surface: Binding[Div] = <div id={_id} class="chart"></div>
+
+			val chart = surface.bind
+
+
+			val sorted = state.sortMode.bind match {
+				case Ascending  => xs.toList.sortBy {_._2._2.score}
+				case Descending => xs.toList.sortBy {_._2._2.score}(Ordering[Double].reverse)
+				case Natural    => xs.toList.sortBy(_._2._1.order)
+			}
+
+			val labels: List[String] = sorted.map(_._1).map(f)
+			val data: List[Double] = sorted.map {_._2._2.score}
+
+			bindBarChart(elem = chart.asInstanceOf[Div],
+				chartTitle = cls + ": " + group,
+				yAxisTitle = cls + ": " + group,
+				xSeries = List(group -> data),
+				xLabels = labels,
+				range = range,
+				scale = state.scaleMode.bind
+			)
+			chart
+		}
+
+		@dom def renderTable(group: ClassGroup): Binding[Div] = {
+			def withUnitS(n: Int, unit: String) = s"$n $unit${if (n == 1) "" else "s"}"
+
+			val x = group.methods.head.run
+			val kvs = Vector(
+				Sized("Mode", x.mode.value),
+				Sized("Metrics", s"1 primary + ${x.secondaryMetrics.size.toString} secondary"),
+				Sized("Fixtures",
+					s"${withUnitS(group.methods.size, "method")} × " +
+					s"${withUnitS(group.methods.map {_.params}.distinct.size, "param")}"),
+				Sized("Threading",
+					s"${withUnitS(x.forks, "fork")} × " +
+					s"${withUnitS(x.threads, "thread")} "),
+				Sized("Warm-up time", x.warmupTime.toString),
+				Sized("Warm-up iter.", s"${x.warmupIterations}(batch=${x.warmupBatchSize})"),
+				Sized("Measure time", x.measurementTime.toString),
+				Sized("Measure iter.", s"${x.measurementIterations}(batch=${x.measurementBatchSize})"),
+
+				Sized("JVM binary", x.jvm.getOrElse("???")),
+				Sized("VM version", x.vmVersion.getOrElse("???")),
+				Sized("JDK version", x.jdkVersion.getOrElse("???")),
+				Sized("JMH version", x.jmhVersion.getOrElse("???")),
+			)
+			// TODO JVM args
+			//				@dom val jvmArgs = Constants(x.jvmArgs.getOrElse(List("???")).map {x => <p>{x}</p> }:_*)
+			if (state.showDetails.bind) {
+				<div class="result-block">
+					{DomBindings.renderTable(Sized("Key", "Value"), kvs, 4)(identity).bind}
+				</div>
+			} else {
+				<div class="result-block">
+				</div>
+			}
+		}
+
+		@dom def mkResults = state.selectedClass.bind match {
+			case Some(group) =>
+
+
+				val metric: ClassMethod => Metric = state.selectedMetric.bind match {
+					case Some(value) => _.run.secondaryMetrics(value)
+					case None        => _.run.primaryMetric
+				}
+
+				val scores = group.methods.map { x => metric(x).score }
+				val range = (scores.min, scores.max)
+				val pairWithMetric = { x: ClassMethod => x -> metric(x) }
+				val charts: BindingSeq[Div] = state.groupMode.bind match {
+					case Parameter =>
+						Constants(group.groupByParam(pairWithMetric).toSeq: _*)
+							.mapBinding { case (param, xs) =>
+								mkChart(group.cls, param.formatted, xs, range)(identity)
+							}
+					case Method    =>
+						Constants(group.groupByMethod(pairWithMetric).toSeq: _*)
+							.mapBinding { case (mtd, xs) =>
+								mkChart(group.cls, mtd, xs, range)(_.formatted)
+							}
+				}
+
+				<section class="class-result">
+					{renderTable(group).bind}<div class="result-block">
+					{charts}
+				</div>
+				</section>
+			case None        => <section class="class-result"></section>
+		}
+
+
+		val sideClassNav = classGroups match {
+			case _ :: Nil => <!-- Single class only  -->
+			case _        =>
+				val ols = Constants(report.packages: _*).map { case PackageGroup(pkg, xs) =>
+					val lis = Constants(xs: _*).map { group =>
+						<li>
+							<a href="#"
+							   class={s"${if (state.selectedClass.bind.contains(group)) "active" else ""}"}
+							   onclick={_: Event => state.selectedClass.value = Some(group)}>
+								{group.cls}
+							</a>
+						</li>
+					}
+					<ol>
+						<li>
+							{pkg}
+						</li>{lis}
+					</ol>
+				}
+				<aside>
+					<nav class="class-nav">
+						{ols}
+					</nav>
+				</aside>
+		}
+
+		val classNav = classGroups match {
+			case x :: Nil =>
+				<span>
+					{s"${x.pkg}.${x.cls}"}
+				</span>
+			case xs       =>
+				<span class="alt-class-nav">
+					Classes:
+					{dropDown[ClassGroup](xs, state.selectedClass, "None") { x => s"${x.pkg}.${x.cls}" }.bind}
+				</span>
+		}
+
+		val groupMode = {
+			<span>
+				Group by:
+				{dropDown[GroupMode](GroupMode.values, state.groupMode).bind}
+			</span>
+		}
+		val sortMode = {
+			<span>
+				Sort:
+				{dropDown[SortMode](SortMode.values, state.sortMode).bind}
+			</span>
+		}
+		val scaleMode = {
+			<span>
+				Sort:
+				{dropDown[ScaleMode](ScaleMode.values, state.scaleMode).bind}
+			</span>
+		}
+		val metric = {
+			<span>
+				Metric:
+				{dropDown[String](state.selectedClass.bind
+				.fold(List.empty[String]) {
+					_.methods
+						.flatMap {_.run.secondaryMetrics.keys}
+						.distinct.sorted
+				}, state.selectedMetric, "Score(primary)").bind}
+			</span>
+		}
+		val details = {
+			<span>
+				Show details:
+				<input type="checkbox"
+					   checked={state.showDetails.value}
+					   onclick={e: Event =>
+						   state.showDetails.value =
+							   e.currentTarget.asInstanceOf[html.Input].checked}>
+				</input>
+			</span>
+		}
+
+		<div id="container" class="jmh-view">
+			{sideClassNav}<article>
+			<header>
+				{classNav}{groupMode}{sortMode}{scaleMode}{metric}{details}
+			</header>{mkResults.bind}
+		</article>
+		</div>
+	}
+
+
 	def renderT(state: JMHViewState) = state.report.value match {
 		case Left(value)   =>
 			@dom val error: Binding[Div] = {
@@ -97,183 +293,7 @@ object JMHView {
 				</div>
 			}
 			error
-		case Right(report) =>
-
-
-			val totalClassGroups = report.packages.map {_.classes.size}.sum
-
-			@dom def renderClassNavs: Binding[Node] = {
-				val lis = Constants(report.packages: _*).map { case PackageGroup(pkg, xs) =>
-					<ol>
-						<li>
-							{pkg}
-						</li>{Constants(xs: _*).map { group =>
-						<li>
-							<a href="#"
-							   class={s"${if (state.selectedClass.bind.contains(group)) "active" else ""}"}
-							   onclick={_: Event => state.selectedClass.value = Some(group)}>
-								{group.cls}
-							</a>
-						</li>
-					}}
-					</ol>
-				}
-				if (totalClassGroups > 1) {
-					<aside>
-						<nav class="class-nav">
-							{lis}
-						</nav>
-					</aside>
-				} else <!-- Single class only  -->
-			}
-
-
-			@dom def mkChart[A](cls: Cls, group: String,
-								xs: Map[A, ClassMethod], range: (Double, Double))
-							   (f: A => String): Binding[Div] = {
-
-				// XXX f should be an instance of Show but that's too much work
-
-				val _id = s"$cls-${group.hashCode.toHexString}"
-
-				@dom val surface: Binding[Div] = <div id={_id} class="chart"></div>
-
-				val chart = surface.bind
-
-
-				val sorted = state.sortMode.bind match {
-					case Ascending  => xs.toList.sortBy(_._2.run.primaryMetric.score)
-					case Descending => xs.toList.sortBy(_._2.run.primaryMetric.score)(Ordering[Double].reverse)
-					case Natural    => xs.toList.sortBy(_._2.order)
-				}
-
-				val labels: List[String] = sorted.map(_._1).map(f)
-				val data: List[Double] = sorted.map(_._2.run.primaryMetric.score)
-
-				bindBarChart(elem = chart.asInstanceOf[Div],
-					chartTitle = cls + ": " + group,
-					yAxisTitle = cls + ": " + group,
-					xSeries = List(group -> data),
-					xLabels = labels,
-					range = range,
-					scale = state.scaleMode.bind
-				)
-				chart
-			}
-
-			@dom def renderTable(group: ClassGroup): Binding[Div] = {
-				def withUnitS(n: Int, unit: String) = s"$n $unit${if (n == 1) "" else "s"}"
-				val x = group.methods.head.run
-				val kvs = Vector(
-					Sized("Mode", x.mode.value),
-					Sized("Metrics", s"1 primary + ${x.secondaryMetrics.size.toString} secondary"),
-					Sized("Fixtures",
-						s"${withUnitS(group.methods.size, "method")} × " +
-						s"${withUnitS(group.methods.map {_.params}.distinct.size, "param")}"),
-					Sized("Threading",
-						s"${withUnitS(x.forks, "fork")} × " +
-						s"${withUnitS(x.threads, "thread")} "),
-					Sized("Warm-up time", x.warmupTime.toString),
-					Sized("Warm-up iter.", s"${x.warmupIterations}(batch=${x.warmupBatchSize})"),
-					Sized("Measure time", x.measurementTime.toString),
-					Sized("Measure iter.", s"${x.measurementIterations}(batch=${x.measurementBatchSize})"),
-
-					Sized("JVM binary", x.jvm.getOrElse("???")),
-					Sized("VM version", x.vmVersion.getOrElse("???")),
-					Sized("JDK version", x.jdkVersion.getOrElse("???")),
-					Sized("JMH version", x.jmhVersion.getOrElse("???")),
-				)
-				// TODO JVM args
-				//				@dom val jvmArgs = Constants(x.jvmArgs.getOrElse(List("???")).map {x => <p>{x}</p> }:_*)
-				if (state.showDetails.bind) {
-					<div class="result-block">
-						{DomBindings.renderTable(Sized("Key", "Value"), kvs, 4)(identity).bind}
-					</div>
-				} else {
-					<div class="result-block">
-					</div>
-				}
-			}
-
-			@dom def mkResults = state.selectedClass.bind match {
-				case Some(group) =>
-					val scores = group.methods.map {_.run.primaryMetric.score}
-					val range = (scores.min, scores.max)
-					val charts: BindingSeq[Div] = state.groupMode.bind match {
-						case Parameter =>
-							Constants(group.groupByParam.toSeq: _*).mapBinding { case (param, xs) =>
-								mkChart(group.cls, param.formatted, xs, range)(identity)
-							}
-						case Method    =>
-							Constants(group.groupByMethod.toSeq: _*).mapBinding { case (mtd, xs) =>
-								mkChart(group.cls, mtd, xs, range)(_.formatted)
-							}
-					}
-
-					<section class="class-result">
-						{renderTable(group).bind}<div class="result-block">
-						{charts}
-					</div>
-					</section>
-				case None        => <section class="class-result"></section>
-			}
-
-			@dom val view: Binding[Div] = {
-				<div id="container" class="jmh-view">
-					{renderClassNavs.bind}<article>
-					<header>
-						{if (totalClassGroups == 1) {
-						<span>
-							{(for {
-							pkg <- report.packages
-							cls <- pkg.classes
-						} yield pkg.pkg + cls.cls).mkString}
-						</span>
-					} else {
-						<span class="alt-class-nav">
-							Classes:
-							{//							renderDropDown[Option[String]](classes.map {Some(_)}, state.selected)(s => Some(s), _.getOrElse("???")).bind
-							"???"}
-						</span>
-					}}<span>
-						Group by:
-						{renderDropDown[GroupMode](GroupMode.values, state.groupMode).bind}
-					</span>
-						<span>
-							Sort:
-							{renderDropDown[SortMode](SortMode.values, state.sortMode).bind}
-						</span>
-						<span>
-							Scale:
-							{renderDropDown[ScaleMode](ScaleMode.values, state.scaleMode).bind}
-						</span>
-
-
-						<span>
-							Metric:
-							{val metrics = state.selectedClass.bind match {
-							case Some(value) => value.methods.flatMap {_.run.secondaryMetrics.keys}.distinct
-							case None        => Nil
-						}
-
-
-						renderDropDown[Option[String]](metrics.map {Some(_)}, state.selectedMetric)(Some(_), {_.getOrElse("Score")}).bind}
-						</span>
-						<span>
-							Show details:
-							<input type="checkbox"
-								   checked={state.showDetails.value}
-								   onclick={e: Event =>
-									   state.showDetails.value =
-										   e.currentTarget.asInstanceOf[html.Input].checked}>
-							</input>
-						</span>
-
-					</header>{mkResults.bind}
-				</article>
-				</div>
-			}
-			view
+		case Right(report) => renderReport(state, report)
 	}
 
 	def bindBarChart(elem: String | js.Object, chartTitle: String, yAxisTitle: String,

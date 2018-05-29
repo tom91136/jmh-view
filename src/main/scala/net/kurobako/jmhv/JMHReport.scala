@@ -44,6 +44,7 @@ object JMHReport {
 		def groupBy[A, B](xs: List[ClassMethod], f: ClassMethod => A)
 						 (g: (A, List[ClassMethod]) => B): List[B] =
 			xs.groupBy(f).map { case (a, cs) => g(a, cs) }.toList
+
 		/*_*/
 		val cms: Either[String, List[ClassMethod]] = report.toList.zipWithIndex.map {
 			case (x, i) => x.benchmark.split('.').toSeq match {
@@ -59,7 +60,8 @@ object JMHReport {
 		/*_*/
 		cms.map { xs =>
 			JMHReport(groupBy(xs, _.pkg) { (pkg, cs) =>
-				PackageGroup(pkg, groupBy(cs, _.cls)(ClassGroup))
+				PackageGroup(pkg, groupBy(cs, _.cls)((cls, ccs) =>
+					ClassGroup(pkg, cls, ccs)))
 			})
 		}
 	}
@@ -77,11 +79,11 @@ object JMHReport {
 	}
 
 	final case class PackageGroup(pkg: Pkg, classes: List[ClassGroup])
-	final case class ClassGroup(cls: Cls, methods: List[ClassMethod]) {
-		def groupByParam: Map[Param, Map[Mtd, ClassMethod]] =
-			methods.groupBy(_.params).mapValues {_.map { x => x.mtd -> x }.toMap}
-		def groupByMethod: Map[Mtd, Map[Param, ClassMethod]] =
-			methods.groupBy(_.mtd).mapValues {_.map { x => x.params -> x }.toMap}
+	final case class ClassGroup(pkg: Pkg, cls: Cls, methods: List[ClassMethod]) {
+		def groupByParam[A](f: ClassMethod => A): Map[Param, Map[Mtd, A]] =
+			methods.groupBy(_.params).mapValues {_.map { x => x.mtd -> f(x) }.toMap}
+		def groupByMethod[A](f: ClassMethod => A): Map[Mtd, Map[Param, A]] =
+			methods.groupBy(_.mtd).mapValues {_.map { x => x.params -> f(x) }.toMap}
 	}
 	final case class ClassMethod(pkg: Pkg, cls: Cls, mtd: Mtd,
 								 order: Int, run: Run) {
@@ -102,7 +104,7 @@ object JMHReport {
 	case object SingleShot extends Time {
 		override def toString: String = "single-shot"
 	}
-	case class Scalar(duration: Duration) extends Time{
+	case class Scalar(duration: Duration) extends Time {
 		override def toString: String = duration.toString
 	}
 
