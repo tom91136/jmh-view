@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Report</title>
+</head>
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css"
+      type="text/css"/>
+
+<link rel="stylesheet"
+      href="jmv-view.css"
+      type="text/css"/>
+
+<style>
+    body {
+        font-family: "Lato", sans-serif;
+        font-size: 15px;
+        line-height: 1.7;
+        color: #7B7B7E;
+        background-color: #fff;
+    }
+
+    #container {
+        height: 100vh;
+    }
+</style>
+
+<body>
+
+<div id="container"></div>
+<script type="text/javascript" src="../jmh-view-jsdeps.js"></script>
+<script type="text/javascript" src="../jmh-view-opt.js"></script>
+
+<script>
+    JMHView.setup("container", "data.json")
+</script>
+
+</body>
+</html>
