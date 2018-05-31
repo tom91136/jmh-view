@@ -1,25 +1,24 @@
 package net.kurobako.jmhv
 
-
+import cats.implicits._
 import com.thoughtworks.binding.Binding.{BindingSeq, Constants, Var}
 import com.thoughtworks.binding.{Binding, dom}
 import enumeratum.values.{StringEnum, StringEnumEntry}
-import net.kurobako.jmhv.DomBindings.dropDown
-import net.kurobako.jmhv.JMHReport.{ClassGroup, ClassMethod, Cls, Metric, PackageGroup}
+import net.kurobako.jmhv.DomBindings.{dropDownVar, highchartsFixedErrorBarChart, renderTable}
+import net.kurobako.jmhv.JMHReport.{ClassGroup, ClassMethod, Metric, Mode, PackageGroup}
 import net.kurobako.jmhv.JMHView.GroupMode.{Method, Parameter}
-import net.kurobako.jmhv.JMHView.ScaleMode.{Linear, Logarithmic}
+import net.kurobako.jmhv.JMHView.ScaleMode.Logarithmic
 import net.kurobako.jmhv.JMHView.SortMode.{Ascending, Descending, Natural}
 import org.scalajs.dom._
 import org.scalajs.dom.experimental.{Fetch, Response}
 import org.scalajs.dom.html.Div
-import shapeless.Sized
+import shapeless.{Sized, nat}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.scalajs.js
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 import scala.scalajs.js.|
-import scala.util.{Failure, Success}
 
 @JSExportTopLevel("JMHView")
 object JMHView {
@@ -27,21 +26,28 @@ object JMHView {
 
 	@JSExport
 	def setup(element: String | js.Object, jsonPath: String | js.Object): Unit = {
+		val node = (element: Any) match {
+			case id: String =>
+				val selected = document.getElementById(id)
+				if (selected == null) throw new Exception(s"No element with #$id found")
+				selected
+			case node: Node => node
+			case unexpected =>
+				throw new Exception(s"Expecting (ID | Dom.Node), got $unexpected")
+		}
 
 		(jsonPath: Any) match {
-			case url: String       => console.log("str", url)
-				fetchJSON(url).onComplete {
-					// TODO replace with FutureBinding
-					case Success(r) => dom.render(document.body, renderT(JMHViewState(Var(Right(r)))))
-					case Failure(e) => throw e
+			case url: String       =>
+				fetchJSON(url).onComplete { t =>
+					val state = JMHViewState(Var(t.toEither.leftMap(x => x.toString)))
+					dom.render(node, renderState(state))
 				}
-			case struct: js.Object => console.log("obj", struct)
+			case struct: js.Object =>
+				dom.render(node, renderState(JMHViewState(Var(JMHReport(struct)))))
 			case unexpected        =>
 				throw new Exception(s"Expecting (String | JMHReport), got $unexpected")
 		}
-
 	}
-
 
 	sealed abstract class GroupMode(val value: String) extends StringEnumEntry
 	case object GroupMode extends StringEnum[GroupMode] {
@@ -68,14 +74,14 @@ object JMHView {
 	implicit def stringEnumEntryShow(e: StringEnumEntry): String = e.value
 	implicit def stringEnumEntryRead[A <: StringEnumEntry](s: String)(implicit ev: StringEnum[A]): A = ev.withValue(s)
 
-	implicit val sortModeRead : String => SortMode  = stringEnumEntryRead[SortMode]
-	implicit val groupModeRead: String => GroupMode = stringEnumEntryRead[GroupMode]
-	implicit val scaleModeRead: String => ScaleMode = stringEnumEntryRead[ScaleMode]
+	implicit val modeRead     : String => JMHReport.Mode = stringEnumEntryRead[JMHReport.Mode]
+	implicit val sortModeRead : String => SortMode       = stringEnumEntryRead[SortMode]
+	implicit val groupModeRead: String => GroupMode      = stringEnumEntryRead[GroupMode]
+	implicit val scaleModeRead: String => ScaleMode      = stringEnumEntryRead[ScaleMode]
 
 	case class JMHConfig(compactSize: Double = Double.MaxValue,
 						 sortMode: SortMode = SortMode.Ascending,
-						 paramMode: GroupMode = GroupMode.Parameter,
-						)
+						 paramMode: GroupMode = GroupMode.Parameter)
 
 	case class JMHViewState(report: Var[Either[String, JMHReport]],
 							config: Var[JMHConfig] = Var(JMHConfig()),
@@ -84,117 +90,199 @@ object JMHView {
 							groupMode: Var[GroupMode] = Var(GroupMode.Parameter),
 							scaleMode: Var[ScaleMode] = Var(ScaleMode.Linear),
 
-							selectedClass: Var[Option[ClassGroup]] = Var(None),
+							selectedGroup: Var[Option[ClassGroup]] = Var(None),
 							selectedMetric: Var[Option[String]] = Var(None),
-							showDetails: Var[Boolean] = Var(true),
-						   )
+							selectedMode: Var[Option[Mode]] = Var(None),
 
-	@dom def renderReport(state: JMHViewState, report: JMHReport) = {
+							showDetails: Var[Boolean] = Var(true))
 
-		val classGroups = report.packages.flatMap {_.classes}
+	// XXX effectful
+	def syncOpt(state: JMHViewState, group: ClassGroup): Unit = {
+		state.selectedMetric.value.filterNot { x =>
+			group.methods
+				.filter { y => state.selectedMode.value.contains(y.run.mode) }
+				.exists(_.run.secondaryMetrics.contains(x))
+		}.foreach { _ => state.selectedMetric.value = None }
+		state.selectedMode.value.filterNot { x =>
+			group.modes.contains(x)
+		}.foreach { _ => state.selectedMode.value = group.modes.keys.headOption }
+	}
 
+	@dom def mkResultOptions(state: JMHViewState, group: ClassGroup) : Binding[Node] = {
 
-		@dom def mkChart[A](cls: Cls, group: String,
-							xs: Map[A, (ClassMethod, Metric)], range: (Double, Double))
-						   (f: A => String): Binding[Div] = {
+		val metrics = (for {
+			mode <- state.selectedMode.bind.toIterable
+			group <- group.modes(mode)
+			metric <- group.run.secondaryMetrics.keys
+		} yield metric).toSeq
 
-			// XXX f should be an instance of Show but that's too much work
+		// reset back to none if the new mode does not have the previous metric
+		syncOpt(state, group)
 
-			val _id = s"$cls-${group.hashCode.toHexString}"
+		// sum of all secondary metric + 1 for primary
+		def countMetric(xs: Seq[ClassMethod]) = xs.map(1 + _.run.secondaryMetrics.size).sum
 
-			@dom val surface: Binding[Div] = <div id={_id} class="chart"></div>
+		val methods = group.methods.toVector
 
-			val chart = surface.bind
-
-
-			val sorted = state.sortMode.bind match {
-				case Ascending  => xs.toList.sortBy {_._2._2.score}
-				case Descending => xs.toList.sortBy {_._2._2.score}(Ordering[Double].reverse)
-				case Natural    => xs.toList.sortBy(_._2._1.order)
-			}
-
-			val labels: List[String] = sorted.map(_._1).map(f)
-			val data: List[Double] = sorted.map {_._2._2.score}
-
-			bindBarChart(elem = chart.asInstanceOf[Div],
-				chartTitle = cls + ": " + group,
-				yAxisTitle = cls + ": " + group,
-				xSeries = List(group -> data),
-				xLabels = labels,
-				range = range,
-				scale = state.scaleMode.bind
-			)
-			chart
+		// sun of all run (1 primary + n secondary )
+		val classFrag = s"${group.cls}(${countMetric(methods)})"
+		val breadcrumb = state.selectedMode.bind match {
+			case Some(mode) =>
+				val modeFiltered = methods.filter(_.run.mode == mode)
+				s" $classFrag / ${mode.value}(${countMetric(modeFiltered)}) / ${
+					state.selectedMetric.bind match {
+						case Some(metric) =>
+							s"$metric(${modeFiltered.count(_.run.secondaryMetrics.contains(metric))})"
+						case None         => s"Score(${group.methods.size})"
+					}
+				}"
+			case None       => classFrag
 		}
 
-		@dom def renderTable(group: ClassGroup): Binding[Div] = {
+		<section class="result-block result-header bar">
+			<span>
+				Mode:
+				{dropDownVar[Mode](group.modes.keys.toSeq, state.selectedMode, "None") {_.shortName}.bind}
+			</span>
+			<span>
+				Metric:
+				{dropDownVar[String](metrics.distinct.sorted, state.selectedMetric, "Score(primary)").bind}
+			</span>
+			<span>
+				{breadcrumb}
+			</span>
+		</section>
+	}
+
+	@dom def mkResultTable(state: JMHViewState, group: ClassGroup): Binding[Div] = if (!state.showDetails.bind) {
+		<div class="result-block"></div>
+	} else group.methods match {
+		case method :: _ =>
+
 			def withUnitS(n: Int, unit: String) = s"$n $unit${if (n == 1) "" else "s"}"
 
-			val x = group.methods.head.run
-			val kvs = Vector(
-				Sized("Mode", x.mode.value),
-				Sized("Metrics", s"1 primary + ${x.secondaryMetrics.size.toString} secondary"),
+			val run = method.run
+
+			// TODO JVM args
+			//	@dom val jvmArgs = Constants(x.jvmArgs.getOrElse(List("???")).map {x => <p>{x}</p> }:_*)
+
+			val kvs: IndexedSeq[Sized[IndexedSeq[String], nat._2]] = Vector(
+				Sized("Mode", run.mode.value),
+				Sized("Metrics", s"1 primary + ${run.secondaryMetrics.size.toString} secondary"),
 				Sized("Fixtures",
 					s"${withUnitS(group.methods.size, "method")} × " +
 					s"${withUnitS(group.methods.map {_.params}.distinct.size, "param")}"),
 				Sized("Threading",
-					s"${withUnitS(x.forks, "fork")} × " +
-					s"${withUnitS(x.threads, "thread")} "),
-				Sized("Warm-up time", x.warmupTime.toString),
-				Sized("Warm-up iter.", s"${x.warmupIterations}(batch=${x.warmupBatchSize})"),
-				Sized("Measure time", x.measurementTime.toString),
-				Sized("Measure iter.", s"${x.measurementIterations}(batch=${x.measurementBatchSize})"),
-
-				Sized("JVM binary", x.jvm.getOrElse("???")),
-				Sized("VM version", x.vmVersion.getOrElse("???")),
-				Sized("JDK version", x.jdkVersion.getOrElse("???")),
-				Sized("JMH version", x.jmhVersion.getOrElse("???")),
+					s"${withUnitS(run.forks, "fork")} × " +
+					s"${withUnitS(run.threads, "thread")} "),
+				Sized("Warm-up time", run.warmupTime.toString),
+				Sized("Warm-up iter.", s"${run.warmupIterations}(batch=${run.warmupBatchSize})"),
+				Sized("Measure time", run.measurementTime.toString),
+				Sized("Measure iter.", s"${run.measurementIterations}(batch=${run.measurementBatchSize})"),
+				Sized("JVM binary", run.jvm.getOrElse("Unknown")),
+				Sized("VM version", run.vmVersion.getOrElse("Unknown")),
+				Sized("JDK version", run.jdkVersion.getOrElse("Unknown")),
+				Sized("JMH version", run.jmhVersion.getOrElse("Unknown")),
 			)
-			// TODO JVM args
-			//				@dom val jvmArgs = Constants(x.jvmArgs.getOrElse(List("???")).map {x => <p>{x}</p> }:_*)
-			if (state.showDetails.bind) {
-				<div class="result-block">
-					{DomBindings.renderTable(Sized("Key", "Value"), kvs, 4)(identity).bind}
-				</div>
-			} else {
-				<div class="result-block">
-				</div>
+
+			<div class="result-block">
+				{renderTable[String, nat._2](Sized("Key", "Value"), kvs, 4)(identity).bind}
+			</div>
+		case Nil         => <div class="result-block">No methods available</div>
+	}
+
+
+	@dom def mkResultCharts(state: JMHViewState, group: ClassGroup): Binding[Div] = state.selectedMode.bind match {
+		case Some(mode) =>
+
+			val metric: ClassMethod => Option[Metric] = state.selectedMetric.bind match {
+				case Some(value) => _.run.secondaryMetrics.get(value)
+				case None        => x => Some(x.run.primaryMetric)
 			}
+
+			val scores =
+				for {
+					mtd <- group.methods
+					if mtd.run.mode == mode
+					metric <- metric(mtd).toIterable
+				} yield metric.score
+
+
+			@dom def mkChart[A](suffix: String, xs: Map[A, (ClassMethod, Metric)])(f: A => String): Binding[Div] = {
+
+				// XXX f should be an instance of Show but that's too much work
+
+				val _id = s"${group.cls}-${suffix.hashCode.toHexString}"
+
+				@dom val surface: Binding[Div] = <div id={_id} class="chart"></div>
+
+				val chart = surface.bind
+
+
+				val sorted = state.sortMode.bind match {
+					case Ascending  => xs.toList.sortBy(_._2._2.score)
+					case Descending => xs.toList.sortBy(_._2._2.score)(Ordering[Double].reverse)
+					case Natural    => xs.toList.sortBy(_._2._1.order)
+				}
+
+				val labels: List[String] = sorted.map(_._1).map(f)
+				val data: List[(Double, Double)] = sorted.map { case (_, (_, m)) => m.score -> m.scoreError }
+
+				highchartsFixedErrorBarChart(elem = chart.asInstanceOf[Div],
+					chartTitle = group.cls + ": " + suffix,
+					yAxisTitle = group.cls + ": " + suffix,
+					xSeries = List(suffix -> data),
+					xLabels = labels,
+					range = scores.min -> scores.max,
+					logScale = state.scaleMode.bind == Logarithmic
+				)
+				chart
+			}
+
+			val pairWithMetric = { x: ClassMethod => metric(x).map {x -> _} }
+
+			val charts: BindingSeq[Div] = state.groupMode.bind match {
+				case Parameter =>
+					Constants(group.groupByParam(mode, pairWithMetric).toSeq: _*)
+						.mapBinding { case (param, xs) =>
+							mkChart(param.formatted, xs)(identity)
+						}
+				case Method    =>
+					Constants(group.groupByMethod(mode, pairWithMetric).toSeq: _*)
+						.mapBinding { case (mtd, xs) =>
+							mkChart(mtd, xs)(_.formatted)
+						}
+			}
+			<div class="result-block">
+				{charts}
+			</div>
+		case None       => <div class="result-block">
+			No mode selected, use the drop down menu to select one; available modes for this class are:
+			{group.modes.keys.map {_.shortName}.mkString(",")}
+		</div>
+
+	}
+
+
+	@dom def renderReport(state: JMHViewState, report: JMHReport): Binding[Div] = {
+
+		val classGroups = report.packages.flatMap {_.classes}
+
+		classGroups match {
+			case x :: Nil => state.selectedGroup.value = Some(x)
+			case _        => // do not select a default one
 		}
 
-		@dom def mkResults = state.selectedClass.bind match {
+		@dom def mkResultClass = state.selectedGroup.bind match {
 			case Some(group) =>
 
-
-				val metric: ClassMethod => Metric = state.selectedMetric.bind match {
-					case Some(value) => _.run.secondaryMetrics(value)
-					case None        => _.run.primaryMetric
-				}
-
-				val scores = group.methods.map { x => metric(x).score }
-				val range = (scores.min, scores.max)
-				val pairWithMetric = { x: ClassMethod => x -> metric(x) }
-				val charts: BindingSeq[Div] = state.groupMode.bind match {
-					case Parameter =>
-						Constants(group.groupByParam(pairWithMetric).toSeq: _*)
-							.mapBinding { case (param, xs) =>
-								mkChart(group.cls, param.formatted, xs, range)(identity)
-							}
-					case Method    =>
-						Constants(group.groupByMethod(pairWithMetric).toSeq: _*)
-							.mapBinding { case (mtd, xs) =>
-								mkChart(group.cls, mtd, xs, range)(_.formatted)
-							}
-				}
+				syncOpt(state, group)
 
 				<section class="class-result">
-					{renderTable(group).bind}<div class="result-block">
-					{charts}
-				</div>
+					{mkResultOptions(state, group).bind}{mkResultTable(state, group).bind}{mkResultCharts(state, group).bind}
 				</section>
-			case None        => <section class="class-result"></section>
+			case _           => <section class="class-result"></section>
 		}
-
 
 		val sideClassNav = classGroups match {
 			case _ :: Nil => <!-- Single class only  -->
@@ -203,14 +291,15 @@ object JMHView {
 					val lis = Constants(xs: _*).map { group =>
 						<li>
 							<a href="#"
-							   class={s"${if (state.selectedClass.bind.contains(group)) "active" else ""}"}
-							   onclick={_: Event => state.selectedClass.value = Some(group)}>
+							   title={group.cls}
+							   class={s"${if (state.selectedGroup.bind.contains(group)) "active" else ""}"}
+							   onclick={_: Event => state.selectedGroup.value = Some(group)}>
 								{group.cls}
 							</a>
 						</li>
 					}
 					<ol>
-						<li>
+						<li title={pkg}>
 							{pkg}
 						</li>{lis}
 					</ol>
@@ -222,135 +311,70 @@ object JMHView {
 				</aside>
 		}
 
-		val classNav = classGroups match {
+		val compactClassNav = classGroups match {
 			case x :: Nil =>
 				<span>
 					{s"${x.pkg}.${x.cls}"}
 				</span>
 			case xs       =>
-				<span class="alt-class-nav">
-					Classes:
-					{dropDown[ClassGroup](xs, state.selectedClass, "None") { x => s"${x.pkg}.${x.cls}" }.bind}
-				</span>
-		}
-
-		val groupMode = {
-			<span>
-				Group by:
-				{dropDown[GroupMode](GroupMode.values, state.groupMode).bind}
-			</span>
-		}
-		val sortMode = {
-			<span>
-				Sort:
-				{dropDown[SortMode](SortMode.values, state.sortMode).bind}
-			</span>
-		}
-		val scaleMode = {
-			<span>
-				Sort:
-				{dropDown[ScaleMode](ScaleMode.values, state.scaleMode).bind}
-			</span>
-		}
-		val metric = {
-			<span>
-				Metric:
-				{dropDown[String](state.selectedClass.bind
-				.fold(List.empty[String]) {
-					_.methods
-						.flatMap {_.run.secondaryMetrics.keys}
-						.distinct.sorted
-				}, state.selectedMetric, "Score(primary)").bind}
-			</span>
-		}
-		val details = {
-			<span>
-				Show details:
-				<input type="checkbox"
-					   checked={state.showDetails.value}
-					   onclick={e: Event =>
-						   state.showDetails.value =
-							   e.currentTarget.asInstanceOf[html.Input].checked}>
-				</input>
-			</span>
+				<div class="alt-class-nav">
+					<span>
+						Classes:
+						{dropDownVar[ClassGroup](xs, state.selectedGroup, "None") { x => s"${x.pkg}.${x.cls}" }.bind}
+					</span>
+				</div>
 		}
 
 		<div id="container" class="jmh-view">
 			{sideClassNav}<article>
-			<header>
-				{classNav}{groupMode}{sortMode}{scaleMode}{metric}{details}
-			</header>{mkResults.bind}
+			<header class="bar">
+				{compactClassNav}<span>
+				Grouping:
+				{dropDownVar[GroupMode](GroupMode.values, state.groupMode).bind}
+			</span>
+
+				<span>
+					Sort:
+					{dropDownVar[SortMode](SortMode.values, state.sortMode).bind}
+				</span>
+				<span>
+					Scale:
+					{dropDownVar[ScaleMode](ScaleMode.values, state.scaleMode).bind}
+				</span>
+				<span>
+					Show details:
+					<input type="checkbox"
+						   checked={state.showDetails.value}
+						   onclick={e: Event =>
+							   state.showDetails.value =
+								   e.currentTarget.asInstanceOf[html.Input].checked}>
+					</input>
+				</span>
+				<p>
+
+				</p>
+			</header>{mkResultClass.bind}
 		</article>
 		</div>
 	}
 
-
-	def renderT(state: JMHViewState) = state.report.value match {
+	@dom def renderState(state: JMHViewState): Binding[Div] = state.report.value match {
 		case Left(value)   =>
-			@dom val error: Binding[Div] = {
-				<div>
+			<div>
+				<p>JMHView failed to instantiate</p>
+				<p>
+					Error:
 					{value}
-				</div>
-			}
-			error
-		case Right(report) => renderReport(state, report)
-	}
-
-	def bindBarChart(elem: String | js.Object, chartTitle: String, yAxisTitle: String,
-					 xSeries: List[(String, List[Double])],
-					 xLabels: List[String],
-					 range: (Double, Double),
-					 scale: ScaleMode): Unit = {
-
-		import com.highcharts.HighchartsAliases.{AnySeries, SeriesCfg, _}
-		import com.highcharts.HighchartsUtils.{Cfg, CfgArray, _}
-		import com.highcharts.config._
-		import com.highcharts.{CleanJsObject, Highcharts}
-
-		import js.JSConverters._
-
-		val (min, max) = range
-
-		val chart = Highcharts.chart(elem, CleanJsObject(new HighchartsConfig {
-
-			val xa = XAxis(categories = xLabels.toJSArray)
-
-			val ya = YAxis(
-				labels = YAxisLabels(enabled = false),
-				max = max, min = min,
-				title = YAxisTitle(text = yAxisTitle),
-				`type` = scale match {
-					case Linear      => "linear"
-					case Logarithmic => "logarithmic"
-				}
-			)
-
-
-			override val legend     : Cfg[Legend]      = Legend(enabled = false)
-			override val plotOptions: Cfg[PlotOptions] = PlotOptions(bar = PlotOptionsBar(
-				pointWidth = 15,
-				pointPadding = 5,
-				dataLabels = PlotOptionsBarDataLabels(enabled = true)))
-			override val credits    : Cfg[Credits]     = Credits(enabled = false)
-			override val chart      : Cfg[Chart]       = Chart(`type` = "bar", height = ((xLabels.size + 1) * 20 + 20))
-			override val title      : Cfg[Title]       = Title(text = null)
-			override val xAxis      : CfgArray[XAxis]  = js.Array(xa)
-			override val yAxis      : CfgArray[YAxis]  = js.Array(ya)
-			override val series     : SeriesCfg        =
-				xSeries.map {
-					case (name, xs) => SeriesBar(name = name, data = xs.toJSArray): AnySeries
-				}.toJSArray
-		}))
-		// to fix issues with binding to a detached DOM element
-		// XXX breaks initial animation
-		window.requestAnimationFrame { _ => chart.reflow() }
+				</p>
+			</div>
+		case Right(report) => renderReport(state, report).bind
 	}
 
 
 	def readJMHReport(json: String): Future[JMHReport] = {
 		Future {
 			// TODO this is stupid
-			time("Parse JSON", JMHReport(json).fold(x => throw new Exception(x), identity))
+			JMHReport(json).fold(x => throw new Exception(x), identity)
 		}
 	}
 
@@ -366,12 +390,5 @@ object JMHView {
 		} else Future.successful(r)
 	}
 
-	def time[R](name: String, block: => R): R = {
-		val t0 = System.nanoTime()
-		val result = block // call-by-name
-		val t1 = System.nanoTime()
-		println(s"<$name> elapsed time: " + ((t1 - t0).toFloat / 1000000.0) + "ms")
-		result
-	}
 
 }

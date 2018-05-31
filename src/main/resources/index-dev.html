@@ -49,7 +49,96 @@
 <script type="text/javascript" src="../jmh-view-fastopt.js"></script>
 
 <script>
+
+
+    var a = [
+        {
+            "jmhVersion": "1.20",
+            "benchmark": "net.kurobako.spb.brainfuck.BrainFuck.baselineRecursiveDecent",
+            "mode": "avgt",
+            "threads": 1,
+            "forks": 1,
+            "jvm": "/usr/java/jdk1.8.0_161/jre/bin/java",
+            "jvmArgs": [
+                "-javaagent:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/lib/idea_rt.jar=34503:/home/tom/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/181.4892.42/bin",
+                "-Dfile.encoding=UTF-8"
+            ],
+            "jdkVersion": "1.8.0_161",
+            "vmVersion": "25.161-b12",
+            "warmupIterations": 3,
+            "warmupTime": "1 s",
+            "warmupBatchSize": 1,
+            "measurementIterations": 3,
+            "measurementTime": "1 s",
+            "measurementBatchSize": 1,
+            "params": {
+                "file": "brainfuck/helloworld.bf"
+            },
+            "primaryMetric": {
+                "score": 1247.5332145589225,
+                "scoreError": 114.56945261798141,
+                "scoreConfidence": [
+                    1132.9637619409411,
+                    1362.1026671769039
+                ],
+                "scorePercentiles": {
+                    "0.0": 1243.1070898124108,
+                    "50.0": 1244.771873471567,
+                    "90.0": 1254.720680392789,
+                    "95.0": 1254.720680392789,
+                    "99.0": 1254.720680392789,
+                    "99.9": 1254.720680392789,
+                    "99.99": 1254.720680392789,
+                    "99.999": 1254.720680392789,
+                    "99.9999": 1254.720680392789,
+                    "100.0": 1254.720680392789
+                },
+                "scoreUnit": "ns/op",
+                "rawData": [
+                    [
+                        1243.1070898124108,
+                        1244.771873471567,
+                        1254.720680392789
+                    ]
+                ]
+            },
+            "secondaryMetrics": {
+                "·stack": {
+                    "score": "NaN",
+                    "scoreError": "NaN",
+                    "scoreConfidence": [
+                        "NaN",
+                        "NaN"
+                    ],
+                    "scorePercentiles": {
+                        "0.0": "NaN",
+                        "50.0": "NaN",
+                        "90.0": "NaN",
+                        "95.0": "NaN",
+                        "99.0": "NaN",
+                        "99.9": "NaN",
+                        "99.99": "NaN",
+                        "99.999": "NaN",
+                        "99.9999": "NaN",
+                        "100.0": "NaN"
+                    },
+                    "scoreUnit": "---",
+                    "rawData": [
+                        [
+                            "NaN",
+                            "NaN",
+                            "NaN"
+                        ]
+                    ]
+                }
+            }
+        }
+    ];
+
     JMHView.setup("container", "https://raw.githubusercontent.com/tom91136/scala-parser-benchmarks/master/docs/data.json")
+    // JMHView.setup("container", {})
+    // JMHView.setup("container", "empty.json")
+    // JMHView.setup("container", "sample1.json")
 
 </script>
 

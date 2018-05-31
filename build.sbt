@@ -45,13 +45,16 @@ lazy val commonSettings = Seq(
 		"-Ywarn-nullary-unit",
 		"-Ywarn-numeric-widen",
 		"-Ywarn-unused:implicits",
-		"-Ywarn-unused:imports",
+//		"-Ywarn-unused:imports", // @dom throws these for some reason
 		"-Ywarn-unused:locals",
-		"-Ywarn-unused:params",
+//		"-Ywarn-unused:params", // intellij needs implicits to silence the broken type checker
 		"-Ywarn-unused:patvars",
 		"-Ywarn-unused:privates",
 		"-Ywarn-value-discard",
 		"-Ypartial-unification",
+
+		// replaces @ScalaJSDefined
+		"-P:scalajs:sjsDefinedByDefault"
 	),
 )
 
@@ -83,7 +86,8 @@ lazy val `jmh-view` = project.in(file("."))
 		),
 		jsDependencies ++= Seq(
 			//			"org.webjars" % "jquery" % "2.2.1" / "jquery.min.js", // minified "jquery.min.js",
-			"org.webjars" % "highcharts" % "5.0.14" / "5.0.14/highcharts.js" //dependsOn "jquery.min.js"
+			"org.webjars" % "highcharts" % "5.0.14" / "5.0.14/highcharts.js",
+			"org.webjars" % "highcharts" % "5.0.14" / "5.0.14/highcharts-more.js"
 		)
 	)
 
