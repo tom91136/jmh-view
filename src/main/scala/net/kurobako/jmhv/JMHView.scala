@@ -108,7 +108,7 @@ object JMHView {
 		}.foreach { _ => state.selectedMode.value = group.modes.keys.headOption }
 	}
 
-	@dom def mkResultOptions(state: JMHViewState, group: ClassGroup) : Binding[Node] = {
+	@dom def mkResultOptions(state: JMHViewState, group: ClassGroup): Binding[Node] = {
 
 		val metrics = (for {
 			mode <- state.selectedMode.bind.toIterable
@@ -227,10 +227,10 @@ object JMHView {
 
 				val labels: List[String] = sorted.map(_._1).map(f)
 				val data: List[(Double, Double)] = sorted.map { case (_, (_, m)) => m.score -> m.scoreError }
+				val units = sorted.map {_._2._2.scoreUnit}.distinct.mkString(" | ")
 
 				highchartsFixedErrorBarChart(elem = chart.asInstanceOf[Div],
-					chartTitle = group.cls + ": " + suffix,
-					yAxisTitle = group.cls + ": " + suffix,
+					yAxisTitle = s"${group.cls}: $suffix ($units)",
 					xSeries = List(suffix -> data),
 					xLabels = labels,
 					range = scores.min -> scores.max,

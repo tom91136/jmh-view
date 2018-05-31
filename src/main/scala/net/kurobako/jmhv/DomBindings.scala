@@ -99,7 +99,8 @@ object DomBindings {
 
 
 	// XXX this whole thing is stupid, need to write my own SVG chart at some point
-	def highchartsFixedErrorBarChart(elem: String | js.Object, chartTitle: String, yAxisTitle: String,
+	def highchartsFixedErrorBarChart(elem: String | js.Object,
+									 yAxisTitle: String,
 									 xSeries: List[(String, List[(Double, Double)])],
 									 xLabels: List[String],
 									 range: (Double, Double),
