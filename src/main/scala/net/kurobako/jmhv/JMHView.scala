@@ -250,7 +250,7 @@ object JMHView {
 				case Method    =>
 					Constants(group.groupByMethod(mode, pairWithMetric).toSeq: _*)
 						.mapBinding { case (mtd, xs) =>
-							mkChart(mtd, xs)(_.formatted)
+							mkChart(reflect.NameTransformer.decode(mtd), xs)(_.formatted)
 						}
 			}
 			<div class="result-block">
