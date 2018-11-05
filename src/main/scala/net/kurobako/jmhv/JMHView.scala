@@ -5,7 +5,7 @@ import com.thoughtworks.binding.Binding.{BindingSeq, Constants, Var}
 import com.thoughtworks.binding.{Binding, dom}
 import enumeratum.values.{StringEnum, StringEnumEntry}
 import net.kurobako.jmhv.DomBindings.{dropDownVar, highchartsFixedErrorBarChart, renderTable}
-import net.kurobako.jmhv.JMHReport.{ClassGroup, ClassMethod, Metric, Mode, PackageGroup}
+import net.kurobako.jmhv.JMHReport.{ClassGroup, ClassMethod, Metric, Mode, PackageGroup, _}
 import net.kurobako.jmhv.JMHView.GroupMode.{Method, Parameter}
 import net.kurobako.jmhv.JMHView.ScaleMode.Logarithmic
 import net.kurobako.jmhv.JMHView.SortMode.{Ascending, Descending, Natural}
@@ -13,6 +13,7 @@ import org.scalajs.dom._
 import org.scalajs.dom.experimental.{Fetch, Response}
 import org.scalajs.dom.html.Div
 import shapeless.{Sized, nat}
+import shapeless.syntax.unwrapped._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -23,9 +24,8 @@ import scala.scalajs.js.|
 @JSExportTopLevel("JMHView")
 object JMHView {
 
-
 	@JSExport
-	def setup(element: String | js.Object, jsonPath: String | js.Object): Unit = {
+	def setup(element: String | js.Object, jsonPath: String | js.Array[String] | js.Object): Unit = {
 		val node = (element: Any) match {
 			case id: String =>
 				val selected = document.getElementById(id)
@@ -42,10 +42,17 @@ object JMHView {
 					val state = JMHViewState(Var(t.toEither.leftMap(x => x.toString)))
 					dom.render(node, renderState(state))
 				}
+			case urls: js.Array[_] =>
+
+				Future.traverse(urls.toList)(x => fetchJSON(x.toString)).map(_.combineAll).onComplete { t =>
+					val state = JMHViewState(Var(t.toEither.leftMap(x => x.toString)))
+					dom.render(node, renderState(state))
+				}
+
 			case struct: js.Object =>
 				dom.render(node, renderState(JMHViewState(Var(JMHReport(struct)))))
 			case unexpected        =>
-				throw new Exception(s"Expecting (String | JMHReport), got $unexpected")
+				throw new Exception(s"Expecting (Array[String] | String | JMHReport), got $unexpected")
 		}
 	}
 
@@ -94,7 +101,10 @@ object JMHView {
 							selectedMetric: Var[Option[String]] = Var(None),
 							selectedMode: Var[Option[Mode]] = Var(None),
 
-							showDetails: Var[Boolean] = Var(true))
+							showDetails: Var[Boolean] = Var(true),
+							mergePkg: Var[Boolean] = Var(false),
+							mergeCls: Var[Boolean] = Var(false)
+						   )
 
 	// XXX effectful
 	def syncOpt(state: JMHViewState, group: ClassGroup): Unit = {
@@ -265,8 +275,19 @@ object JMHView {
 
 
 	@dom def renderReport(state: JMHViewState, report: JMHReport): Binding[Div] = {
-
-		val classGroups = report.packages.flatMap {_.classes}
+		val packages = report.grouped(
+			mapPkg = if (state.mergePkg.bind) {
+				val common = (report.methods.map(_.pkg: String)
+								  .distinct.size + " package(s)").wrap[Pkg]
+				_ => common
+			} else identity,
+			mapCls = if (state.mergeCls.bind) {
+				(pkg, _) =>
+					(report.methods.filter(_.pkg == pkg)
+						 .map(_.cls: String)
+						 .distinct.size + " class(s)").wrap[Cls]
+			} else (_, y) => y)
+		val classGroups = packages.flatMap(_.classes)
 
 		classGroups match {
 			case x :: Nil => state.selectedGroup.value = Some(x)
@@ -287,7 +308,7 @@ object JMHView {
 		val sideClassNav = classGroups match {
 			case _ :: Nil => <!-- Single class only  -->
 			case _        =>
-				val ols = Constants(report.packages: _*).map { case PackageGroup(pkg, xs) =>
+				val ols = Constants(packages: _*).map { case PackageGroup(pkg, xs) =>
 					val lis = Constants(xs: _*).map { group =>
 						<li>
 							<a href="#"
@@ -347,6 +368,24 @@ object JMHView {
 						   checked={state.showDetails.value}
 						   onclick={e: Event =>
 							   state.showDetails.value =
+								   e.currentTarget.asInstanceOf[html.Input].checked}>
+					</input>
+				</span>
+				<span>
+					Merge packages:
+					<input type="checkbox"
+						   checked={state.mergePkg.value}
+						   onclick={e: Event =>
+							   state.mergePkg.value =
+								   e.currentTarget.asInstanceOf[html.Input].checked}>
+					</input>
+				</span>
+				<span>
+					Merge classes:
+					<input type="checkbox"
+						   checked={state.mergeCls.value}
+						   onclick={e: Event =>
+							   state.mergeCls.value =
 								   e.currentTarget.asInstanceOf[html.Input].checked}>
 					</input>
 				</span>

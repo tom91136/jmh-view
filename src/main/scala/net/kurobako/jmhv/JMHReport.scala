@@ -3,19 +3,35 @@ package net.kurobako.jmhv
 import java.util.concurrent.TimeUnit
 
 import cats.implicits._
-import net.kurobako.jmhv.JMHReport.PackageGroup
-import shapeless.syntax.unwrapped._
+import cats.kernel.Monoid
+import net.kurobako.jmhv.JMHReport.{ClassGroup, ClassMethod, Cls, PackageGroup, Pkg}
 import shapeless.tag.@@
 
 import scala.collection.immutable
 import scala.concurrent.duration.Duration
 import scala.scalajs.js
 
+import shapeless.syntax.unwrapped._
 
-final case class JMHReport(packages: List[PackageGroup])
+final case class JMHReport(methods: List[ClassMethod]) {
 
+	private def groupBy[A, B](xs: List[ClassMethod], f: ClassMethod => A)
+							 (g: (A, List[ClassMethod]) => B): List[B] =
+		xs.groupBy(f).map { case (a, cs) => g(a, cs) }.toList
+
+	def grouped(mapPkg: Pkg => Pkg = identity, mapCls: (Pkg, Cls) => Cls = (_, y) => y): List[PackageGroup] =
+		groupBy(methods, m => mapPkg(m.pkg)) { (pkg, cs) =>
+			PackageGroup(pkg, groupBy(cs, m => mapCls(pkg, m.cls))((cls, ccs) =>
+				ClassGroup(pkg, cls, ccs, ccs.groupBy(_.run.mode))))
+		}
+}
 
 object JMHReport {
+
+	implicit val jmhReportMonoid: Monoid[JMHReport] = new Monoid[JMHReport] {
+		override def empty = JMHReport(Nil)
+		override def combine(x: JMHReport, y: JMHReport) = JMHReport(x.methods ++ y.methods)
+	}
 
 	// missing key should serialise to None, the default throws an exception
 	final object OptionPickler extends upickle.AttributeTagged {
@@ -32,7 +48,7 @@ object JMHReport {
 			}
 	}
 
-	import OptionPickler.{macroRW, read, readJs, readwriter, ReadWriter => RW, Reader}
+	import OptionPickler.{Reader, macroRW, read, readJs, readwriter, ReadWriter => RW}
 	import enumeratum.values._
 
 	def apply(json: js.Any): Either[String, JMHReport] = for {
@@ -46,11 +62,6 @@ object JMHReport {
 	} yield report
 
 	def apply(report: Seq[Run]): Either[String, JMHReport] = {
-
-		def groupBy[A, B](xs: List[ClassMethod], f: ClassMethod => A)
-						 (g: (A, List[ClassMethod]) => B): List[B] =
-			xs.groupBy(f).map { case (a, cs) => g(a, cs) }.toList
-
 		/*_*/
 		val cms: Either[String, List[ClassMethod]] = report.toList.zipWithIndex.map {
 			case (x, i) => x.benchmark.split('.').toSeq match {
@@ -64,12 +75,7 @@ object JMHReport {
 			}
 		}.sequence
 		/*_*/
-		cms.map { xs =>
-			JMHReport(groupBy(xs, _.pkg) { (pkg, cs) =>
-				PackageGroup(pkg, groupBy(cs, _.cls)((cls, ccs) =>
-					ClassGroup(pkg, cls, ccs, ccs.groupBy(_.run.mode))))
-			})
-		}
+		cms.map(JMHReport(_))
 	}
 
 	trait _Cls

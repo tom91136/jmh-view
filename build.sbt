@@ -71,7 +71,7 @@ lazy val `jmh-view` = project.in(file("."))
 		workbenchDefaultRootObject := Some(("classes/index-dev.html", "target/scala-2.12")),
 		libraryDependencies ++= Seq(
 			"com.chuusai" %%% "shapeless" % "2.3.3",
-			"org.typelevel" %%% "cats-core" % "1.1.0",
+			"org.typelevel" %%% "cats-core" % "1.4.0",
 			"com.lihaoyi" %%% "upickle" % "0.6.6",
 			"com.lihaoyi" %%% "pprint" % "0.5.3",
 			"com.beachape" %%% "enumeratum" % "1.5.13",

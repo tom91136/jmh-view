@@ -19,7 +19,7 @@ Essentially, if it compiles, it probably works.
 
 ## How to use
 
-First, clone build the project, see the build section for more information.
+First, clone and build the project, see the build section for more information.
 
 Create a `<div>` and initialise it:
 
@@ -29,8 +29,10 @@ Create a `<div>` and initialise it:
     JMHView.setup("container", "data.json")
     // alternatively: 
     JMHView.setup("container", "http://url/to/my/data.json")
-	// JS objects are supported too  
-	JMHView.setup("container", [ /*..*/ ] )
+    // fusing multiple reports
+    JMHView.setup("container", [ "http://url/to/my/data1.json", "http://url/to/my/data2.json"])
+    // JS objects are supported too  
+    JMHView.setup("container", [ /*..*/ ] )
 </script>
 ```
 
@@ -56,15 +58,22 @@ The project uses sbt; to create a minified bundle do the following:
     
 The following files will be generated:
 
-     src/main/resources/jmv-view.css
      target/scala-2.12/jmh-view-opt.js
      target/scala-2.12/jmh-view-jsdeps.js
+
+The stylesheet can be copied from `src/main/resources/jmv-view.css`.
      
 If you are not sure how to use these, take a look at `src/main/resources/index-prod.html`.
 
 Be sure to modify paths so that it works in your hosting environment.
 
+For development:
 
+    > sbt 
+    sbt:jmh-view> ...  Server online at http://localhost:12345/ ...
+
+Navigate to the given url and append `classes/index-dev.html`, the page will reload on any 
+subsequent invocation of `fastOptJS`.
 
 ## Licence
 
